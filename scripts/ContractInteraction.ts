@@ -9,6 +9,7 @@ const MYTOKEN_CONTRACT_ABI = [
     "function _afterTokenTransfer(address from, address to, uint256 amount)",
     "function _mint(address to, uint256 amount)",
     "function _burn(address account, uint256 amount)",
+    "function totalSupply() public view returns (uint256)",
 ];
 
 async function main() {
@@ -27,7 +28,10 @@ async function main() {
     const signer = wallet.connect(provider);
 
     MyTokenContract = new ethers.Contract(MYTOKEN_CONTRACT_ADDRESS, MYTOKEN_CONTRACT_ABI, signer);
-    console.log(MyTokenContract);
+    // console.log(MyTokenContract);
+
+    const totalSupply = await MyTokenContract.totalSupply();
+    console.log("Total supply: ", ethers.utils.formatEther(totalSupply));
 
     // UNCOMMENT CODE TO MINT TOKENS TO MARCO
     // console.log("Minting new tokens for Marco's account...\n");
