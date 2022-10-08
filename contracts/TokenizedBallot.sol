@@ -28,7 +28,6 @@ contract TokenizedBallot {
         tokenContract = ITokenizedVotes(_tokenContract);
     }
 
-
     function votePower(address account) public view returns (uint256 votePower_) {
         votePower_ = tokenContract.getPastVotes(account, referenceBlock);
         votePowerSpent[account];
