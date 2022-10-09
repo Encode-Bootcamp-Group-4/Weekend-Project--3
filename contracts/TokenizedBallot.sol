@@ -36,6 +36,7 @@ contract TokenizedBallot {
     function vote(uint256 proposal, uint256 amount) public {
         uint256 votePower_ = votePower(msg.sender);
         require(votePower_ >= amount, "Not enough vote power");
+        require(votePowerSpent[msg.sender] + amount <= votePower_, "VotePowerSpent + amount > votePower");
         votePowerSpent[msg.sender] += amount;
         proposals[proposal].voteCount += amount;
     }
@@ -53,4 +54,5 @@ contract TokenizedBallot {
     function winnerName() external view returns (bytes32 winnerName_) {
         winnerName_ = proposals[winningProposal()].name;
     }
+
 }

@@ -1,4 +1,5 @@
-import { ethers } from "ethers";
+import { ethers } from "hardhat";
+import  web3  from "web3";
 import * as dotenv from "dotenv";
 dotenv.config();
 
@@ -13,11 +14,11 @@ const MYTOKEN_CONTRACT_ABI = [
     "function getVotes(address account) public view returns (uint256)",
     "function delegate(address delegatee) public",
 ];
-const TOKENIZEDBALLOT_CONTRACT_ADDRESS = "0xEA9288fbBe3f6F8616aAEa2Fd367615E6a4D6A52";
+const TOKENIZEDBALLOT_CONTRACT_ADDRESS = "0xA56c8B251433a29c4aB216D0bC2f6A38CD1B17a0";
 const TOKENIZEDBALLOT_CONTRACT_ABI = [
     "function getPastVotes(address account, uint256 blockNumber) public view returns (uint256)",
     "function votePower(address account) public view returns (uint256)",
-    "function vote(address proposal, uint256 amount) public",
+    "function vote(uint256 proposal, uint256 amount) public",
     "function winningProposal() public view returns (uint256)",
     "function winnerName() public view returns (bytes32)",
 ];
@@ -26,14 +27,15 @@ const RIC_ADDRESS="0x4748737b00CE9746737f85a3d1CdcD667a61d0A3";
 const BRYCE_ADDRESS="0x82C10e2A9959DEBbd9ac3a35b49CD6990421fd9B";
 const DAVID_ADDRESS="0xb0438eFFB3E55Da89929f8FE999Ec2e107B6c16c";
 const MAXWELL_ADDRESS="0x697B26622d0fd6DA5742cF4fD8e463213417741C";
+const BRYCE_ADDRESS_2="0x5D6e74bd320bc12dE273c705198b4a1d6c63832A";
 
 async function main() {
     let MyTokenContract: any;
+    let TokenizedBallotContract: any;
 
     const options = {
         // The default provider will be used if no provider is specified
         alchemy: process.env.ALCHEMY_API_KEY,
-        // infura: process.env.INFURA_API_KEY,
     };
 
     const provider = new ethers.providers.AlchemyProvider("goerli", options.alchemy);
@@ -43,6 +45,7 @@ async function main() {
     const signer = wallet.connect(provider);
 
     MyTokenContract = new ethers.Contract(MYTOKEN_CONTRACT_ADDRESS, MYTOKEN_CONTRACT_ABI, signer);
+    TokenizedBallotContract = new ethers.Contract(TOKENIZEDBALLOT_CONTRACT_ADDRESS, TOKENIZEDBALLOT_CONTRACT_ABI, signer);
     // console.log(MyTokenContract);
 
     // MINT FUNCTIONS //
@@ -98,16 +101,37 @@ async function main() {
 
     // DELEGATE VOTING POWER //
 
-    // UNCOMMENT CODE TO DELEGATE VOTING POWER TO BRYCE
-    console.log("Delegating voting power to Bryce...\n");
-    const delegateTx = await MyTokenContract.delegate(
-        BRYCE_ADDRESS
-    );
-    await delegateTx.wait();
-    console.log("Voting power delegated to Bryce!\n");
-    const bryceVotingPowerAfterDelegation = await MyTokenContract.getVotes( BRYCE_ADDRESS );
-    console.log(`Bryce's voting power after delegation: ${ethers.utils.formatEther(bryceVotingPowerAfterDelegation)}\n`);
+    // UNCOMMENT CODE TO DELEGATE VOTING POWER AND CHANGE ADDRESS
+    // console.log(`Delegating voting power to ${ BRYCE_ADDRESS }...\n`);
+    // const delegateTx = await MyTokenContract.delegate(
+    //     BRYCE_ADDRESS
+    // );
+    // await delegateTx.wait();
+    // console.log("Voting power delegated!\n");
+    // // const votingPowerAfterDelegation = await MyTokenContract.getVotes( BRYCE_ADDRESS );
+    // const votingPowerAfterDelegation = await TokenizedBallotContract.votePower( BRYCE_ADDRESS );
+    // console.log(`Voting power of ${BRYCE_ADDRESS} after delegation: ${ethers.utils.formatEther(votingPowerAfterDelegation)}\n`);
 
+    // UNCOMMENT CODE TO VOTE FOR A PROPOSAL AND CHANGE PROPOSAL NUMBER
+    // console.log("Voting for proposal 1...\n");
+    // const voteTx = await TokenizedBallotContract.vote(1, ethers.utils.parseEther("1"));
+    // await voteTx.wait();
+    // console.log("Voted for proposal 1!\n");
+    
+    // UNCOMMENT CODE TO GET VOTING POWER AND CHANGE ADDRESS
+    // console.log("Getting voting power...\n");
+    // const votingPower = await TokenizedBallotContract.votePower(BRYCE_ADDRESS);
+    // console.log(`Voting power: ${ethers.utils.formatEther(votingPower)}\n`);
+
+    // UNCOMMENT CODE TO QUERY WINNING PROPOSAL
+    // console.log("Getting winning proposal...\n");
+    // const winningProposal = await TokenizedBallotContract.winningProposal();
+    // console.log(`Winning proposal: ${winningProposal}\n`);
+
+    // UNCOMMENT CODE TO QUERY WINNER NAME
+    // console.log("Getting winner name...\n");
+    // const winnerName = await TokenizedBallotContract.winnerName();
+    // console.log(`Winner name: ${web3.utils.hexToUtf8(winnerName)}\n`);
 };
 
 main().catch((error) => {
