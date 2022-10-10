@@ -28,6 +28,7 @@ const BRYCE_ADDRESS="0x82C10e2A9959DEBbd9ac3a35b49CD6990421fd9B";
 const DAVID_ADDRESS="0xb0438eFFB3E55Da89929f8FE999Ec2e107B6c16c";
 const MAXWELL_ADDRESS="0x697B26622d0fd6DA5742cF4fD8e463213417741C";
 const BRYCE_ADDRESS_2="0x5D6e74bd320bc12dE273c705198b4a1d6c63832A";
+const DAVID_ADDRESS_2="0xF7D31419A226e85f2E796F7422c846c5b05b149b";
 
 async function main() {
     let MyTokenContract: any;
@@ -80,7 +81,7 @@ async function main() {
     // UNCOMMENT CODE TO MINT TOKENS TO DAVID
     // console.log("Minting new tokens for David's account...\n");
     // const mintTx = await MyTokenContract.mint(
-    //     DAVID_ADDRESS,
+    //     DAVID_ADDRESS_2,
     //     TOKENS_MINTED
     // );
     // await mintTx.wait();
